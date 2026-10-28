@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Secret For You 💗</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#fff0f3; --bg2:#ffe3ec; --card:#ffffff; --text:#4a2436;
+    --sub:#9a5872; --pink:#ff4d79; --pink-dark:#e8265a; --pink-soft:#ffc7d7;
+    --shadow: 0 10px 30px rgba(230,50,100,.18);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg1:#2a0f1c; --bg2:#3a1526; --card:#3a1726; --text:#ffe3ec;
+      --sub:#f3a6c0; --pink:#ff6690; --pink-dark:#ff3f74; --pink-soft:#5c2338;
+      --shadow: 0 10px 30px rgba(0,0,0,.4);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg1:#2a0f1c; --bg2:#3a1526; --card:#3a1726; --text:#ffe3ec;
+    --sub:#f3a6c0; --pink:#ff6690; --pink-dark:#ff3f74; --pink-soft:#5c2338;
+    --shadow: 0 10px 30px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0; min-height:100%;
+    font-family:'Poppins', ui-sans-serif, system-ui, sans-serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--text);
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    overflow-x:hidden;
+    position:relative;
+  }
+  .hearts-bg{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;}
+  .hearts-bg span{
+    position:absolute; bottom:-10%; font-size:22px; opacity:.55;
+    animation:float 9s linear infinite;
+  }
+  @keyframes float{
+    0%{transform:translateY(0) rotate(0deg); opacity:0;}
+    10%{opacity:.6;}
+    100%{transform:translateY(-115vh) rotate(25deg); opacity:0;}
+  }
+  .wrap{
+    position:relative; z-index:1; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:28px 18px;
+  }
+  .card{
+    width:100%; max-width:420px; background:var(--card);
+    border-radius:28px; box-shadow:var(--shadow);
+    padding:32px 26px 34px; text-align:center;
+    position:relative; overflow:hidden;
+  }
+  .card::before{
+    content:""; position:absolute; top:-40px; right:-40px;
+    width:140px; height:140px; background:var(--pink-soft);
+    border-radius:50%; opacity:.5;
+  }
+  h1.script{
+    font-family:'Dancing Script', cursive;
+    font-size:2.2rem; color:var(--pink-dark); margin:0 0 6px;
+    position:relative;
+  }
+  p.sub{color:var(--sub); margin:0 0 22px; font-size:.95rem; position:relative;}
+  /* ---- QR section ---- */
+  .qr-frame{
+    position:relative; width:220px; height:220px; margin:0 auto 18px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .qr-frame::before{
+    content:"❤"; position:absolute; inset:0; display:flex; align-items:center;
+    justify-content:center; font-size:260px; color:var(--pink-soft);
+    z-index:0; line-height:1;
+  }
+  #qrcode{
+    position:relative; z-index:1; background:#fff; padding:10px;
+    border-radius:16px; box-shadow:0 6px 18px rgba(230,50,100,.25);
+  }
+  .corner-hearts span{position:absolute; font-size:18px; color:var(--pink); z-index:2;}
+  .corner-hearts span:nth-child(1){top:-6px; left:-6px;}
+  .corner-hearts span:nth-child(2){top:-6px; right:-6px;}
+  .corner-hearts span:nth-child(3){bottom:-6px; left:-6px;}
+  .corner-hearts span:nth-child(4){bottom:-6px; right:-6px;}
+  .hint{font-size:.8rem; color:var(--sub); margin-top:4px;}
+  /* ---- code entry ---- */
+  .code-dots{display:flex; gap:14px; justify-content:center; margin:14px 0 16px;}
+  .code-dots span{width:16px; height:16px; border-radius:50%; border:2px solid var(--pink-soft); background:transparent; transition:background .15s, transform .15s; display:inline-block;}
+  .code-dots span.filled{background:var(--pink); border-color:var(--pink); transform:scale(1.15);}
+  .keypad{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:240px; margin:0 auto 6px;}
+  .key{
+    position:relative; width:70px; height:64px; margin:0 auto;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.25rem; font-weight:700; color:var(--pink-dark);
+    background:transparent; border:none; cursor:pointer; font-family:inherit;
+  }
+  .key::before{
+    content:"❤"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:50px; color:var(--pink-soft); z-index:0; transition:transform .12s, color .12s;
+  }
+  .key span{position:relative; z-index:1;}
+  .key:active::before{transform:scale(.88); color:var(--pink);}
+  .key.action{font-size:.78rem; font-weight:600; color:var(--sub);}
+  .key.action::before{font-size:32px;}
+  .error-msg{color:var(--pink-dark); font-size:.85rem; min-height:1.2em; margin-bottom:4px;}
+  /* ---- buttons ---- */
+  .btn{
+    border:none; border-radius:999px; padding:13px 28px; font-size:1rem;
+    font-weight:600; cursor:pointer; font-family:inherit; transition:transform .15s ease;
+  }
+  .btn:active{transform:scale(.96);}
+  .btn-primary{background:var(--pink); color:#fff; box-shadow:0 8px 18px rgba(255,77,121,.35);}
+  .btn-primary:hover{background:var(--pink-dark);}
+  .btn-ghost{background:transparent; color:var(--sub); border:2px solid var(--pink-soft);}
+  .choice-row{
+    display:flex; gap:14px; justify-content:center; align-items:center;
+    margin-top:22px; flex-wrap:wrap; position:relative; min-height:56px;
+  }
+  .question{font-size:1.25rem; font-weight:600; margin:14px 0 4px; line-height:1.4;}
+  .question .script{display:block; font-family:'Dancing Script',cursive; font-size:2rem; color:var(--pink-dark); margin-bottom:4px;}
+  .tease{font-size:.85rem; color:var(--sub); min-height:1.2em; margin-top:10px;}
+  .screen{display:none;}
+  .screen.active{display:block; animation:pop .35s ease;}
+  @keyframes pop{from{opacity:0; transform:scale(.92);} to{opacity:1; transform:scale(1);}}
+  /* final */
+  .final-heart{font-size:4rem; animation:beat 1.1s ease-in-out infinite;}
+  @keyframes beat{0%,100%{transform:scale(1);} 50%{transform:scale(1.15);}}
+  .final-msg{font-family:'Dancing Script',cursive; font-size:1.7rem; color:var(--pink-dark); margin:14px 0 6px;}
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="wrap">
+  <div class="card">
+
+    <!-- the ask -->
+    <div class="screen active" id="screen-ask">
+      <h1 class="script">For Keerthi 💗</h1>
+
+      <div class="question" id="questionText"></div>
+      <div class="choice-row" id="choiceRow">
+        <a class="btn btn-primary" id="unblockBtn" style="display:inline-block; text-decoration:none;" href="https://www.instagram.com/_sriman______?psln=MTZ3c3E4N3MxbG5wcA==" target="_blank" rel="noopener">Unblock 🔓</a>
+        <button class="btn btn-ghost" id="noBtn">No</button>
+      </div>
+      <div class="tease" id="teaseMsg">&nbsp;</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // floating background hearts
+  const heartsBg = document.getElementById('heartsBg');
+  const emojis = ['❤','💕','💗','💖'];
+  for(let i=0;i<16;i++){
+    const s = document.createElement('span');
+    s.textContent = emojis[i % emojis.length];
+    s.style.left = Math.random()*100 + '%';
+    s.style.animationDuration = (7 + Math.random()*6) + 's';
+    s.style.animationDelay = (Math.random()*9) + 's';
+    s.style.fontSize = (16 + Math.random()*18) + 'px';
+    heartsBg.appendChild(s);
+  }
+
+  // the "no" escalation — begging to be unblocked
+  const stages = [
+    { q: '<span class="script">Hello Keerthi,</span>I really miss talking to you,<br>every day without you feels a little quieter,<br>please unblock me on Instagram?', no: "No", tease: "" },
+    { q: "Pretty please? 🥺", no: "No", tease: "I promise I'm not that bad" },
+    { q: "Come on, please, just one more chance? 😏", no: "Still no", tease: "I'll be good, I swear" },
+    { q: "I'll keep asking until you do 😌", no: "No!", tease: "that no button looks tired" },
+    { q: "Okay, I'll just wait here then 💗", no: "No", tease: "unblock is looking like the only move" }
+  ];
+  let stageIndex = 0;
+  const choiceRow = document.getElementById('choiceRow');
+  const questionEl = document.querySelector('#screen-ask .question');
+  const unblockBtn = document.getElementById('unblockBtn');
+  const noBtn = document.getElementById('noBtn');
+  const teaseMsg = document.getElementById('teaseMsg');
+
+  function renderStage(){
+    const st = stages[stageIndex];
+    questionEl.innerHTML = st.q;
+    teaseMsg.textContent = st.tease;
+    // grow unblock, shrink no a little each stage
+    const scaleUnblock = 1 + stageIndex * 0.08;
+    unblockBtn.style.transform = 'scale(' + scaleUnblock + ')';
+    const noScale = Math.max(0.55, 1 - stageIndex * 0.12);
+    noBtn.style.transform = 'scale(' + noScale + ')';
+    noBtn.textContent = st.no;
+  }
+  renderStage();
+
+  noBtn.addEventListener('click', () => {
+    if(stageIndex < stages.length - 1){
+      stageIndex++;
+      renderStage();
+    } else {
+      // out of stages: no button disappears, only unblock remains
+      noBtn.style.transition = 'opacity .3s, transform .3s';
+      noBtn.style.opacity = '0';
+      noBtn.style.pointerEvents = 'none';
+      setTimeout(() => noBtn.remove(), 300);
+      teaseMsg.textContent = "looks like unblock is the only option left 😄";
+      unblockBtn.style.transform = 'scale(1.25)';
+    }
+  });
+
+  // dodge trick on hover for a couple of mid stages (fun, not frustrating)
+  noBtn.addEventListener('mouseenter', () => {
+    if(stageIndex >= 2 && stageIndex < stages.length - 1){
+      const row = choiceRow.getBoundingClientRect();
+      const maxX = row.width - 90;
+      noBtn.style.position = 'relative';
+      noBtn.style.left = (Math.random()*maxX - maxX/2) + 'px';
+    }
+  });
+</script>
+</body>
+</html>
